@@ -33,12 +33,15 @@ async function deleteTodo(idTodo) {
   <div class="p-4 border-2 border-black rounded-t-lg  border-dotted flex flex-col gap-0 max-w-xl  ">
     <LogosTheDoubleQuotes class="w-6"></LogosTheDoubleQuotes>
     <p class="text-sm  sm:text-2xl font-bold text-black">{{title}}</p>
-    <p class="text-sm  sm:text-2xl font-bold text-black">{{id}}</p>
     <p class="text-sm sm:text-lg text-slate-600">{{description}}</p>
   </div>
     <div class=" flex p-2 bg-gray-200 border-2 border-black border-dotted rounded-b-lg flex">
         <LogosTheTrash  @click="deleteTodo(id)" class="w-6 cursor-pointer"></LogosTheTrash>
-        <LogosTheEdit class="w-6 cursor-pointer"></LogosTheEdit>
+        <CommonPublicTheUpdateTodo 
+        v-bind:id="id"
+        v-bind:title="title"
+        v-bind:description="description"
+        class="w-6 cursor-pointer"></CommonPublicTheUpdateTodo>
 
     </div> 
 

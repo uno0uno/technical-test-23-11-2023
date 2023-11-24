@@ -1,9 +1,15 @@
 <script setup>
 
+const props = defineProps({ 
+    id: {type: Number},
+    title: {type: String},
+    description: {type: String},
+    });
+
+const { id, title, description } = toRefs(props);
+
 const toggle = ref(false);
 const sended = ref(false);
-const titulo = ref('');
-const description = ref('');
 const loading = ref(false);
 
 function open() {
@@ -22,10 +28,10 @@ async function sendTodo() {
   error,
 } = await useAsyncData('send-new-todo', () => {
   try {
-    return $fetch(`/api/TodoList/NewTodo`, {
+    return $fetch(`/api/TodoList/UpdateTodo?=${id.value}`, {
     method: 'POST',
     body: { 
-      title: titulo.value,
+      title: title.value,
       description: description.value
       }
   });
@@ -34,8 +40,6 @@ async function sendTodo() {
   }
 });
 if(toRaw(response.value)){
-  titulo.value = '';
-  description.value = '';
   loading.value = false;
   sended.value = false;
 }
@@ -48,15 +52,11 @@ if(toRaw(response.value)){
   <button
     class="
       inline-flex
-      h-12
       w-full
       items-center
       justify-center
       gap-2
       rounded-lg
-      border-2 border-black rounded-t-lg  border-dotted
-      px-4
-      py-2
       text-base
       font-extrabold
       leading-6
@@ -65,7 +65,7 @@ if(toRaw(response.value)){
     "
     @click="open()"
   >
-    Nueva Tarea
+    <LogosTheEdit class="w-6 cursor-pointer"></LogosTheEdit>
   </button>
 
   <!-- Elemento del popup -->
@@ -76,15 +76,15 @@ if(toRaw(response.value)){
       <label for="EmailUser">
         <blockquote class="text-3xl sm:text-4xl font-semibold italic text-slate-900 py-2">
           <span class="before:block before:absolute before:-inset-1 before:-skew-y-2 before:bg-slate-900 relative inline-block">
-            <span class="relative text-white capitalize">Nueva Tarea 😍</span>
+            <span class="relative text-white capitalize">Edita tú tarea ✏️</span>
           </span>
         </blockquote>
       </label>
 
       <input class="flex flex-col border-2 border-slate-900 border-dashed items-center py-2 px-4 rounded-xl"
-           type="text" id="TitleTodo" v-model="titulo" placeholder="Titulo" />
+           type="text" id="TitleTodo" v-model="title" />
         <input class="flex flex-col border-2 border-slate-900 border-dashed items-center py-2 px-4 rounded-xl"
-           type="text" id="DescriptionTodo" v-model="description" placeholder="Descripción" />
+           type="text" id="DescriptionTodo" v-model="description"  />
     </div>
 
     <div v-if="loading"
